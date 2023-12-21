@@ -70,7 +70,6 @@ class Menu:
 
         return None
 
-
 class Game:
     def __init__(self):
         pygame.init()
@@ -81,6 +80,15 @@ class Game:
         self.clock = pygame.time.Clock()
         self.ticks = 60
         self.exit = False
+        self.score = 0
+        self.level = 1
+
+    def draw_score(self):
+        font = pygame.font.Font(None, 36)
+        score_text = font.render(f"Score: {self.score}", True, (255, 255, 255))
+        level_text = font.render(f"Level: {self.level}", True, (255, 255, 255))
+        self.screen.blit(score_text, (10, 10))
+        self.screen.blit(level_text, (10, 50))
 
     def draw_parking_lines(self):
         # Linien für Parklücke 1
@@ -164,6 +172,7 @@ class Game:
 
             self.screen.fill((0, 0, 0))
             self.draw_parking_lines()
+            self.draw_score()  # Draw the score and level
 
             rotated = pygame.transform.rotate(car_image, car.angle)
             rect = rotated.get_rect()
