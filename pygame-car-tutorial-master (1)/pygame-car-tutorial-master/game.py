@@ -36,6 +36,41 @@ class Car:
 
 ppu = 32
 
+class Menu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.Font(None, 36)
+        self.menu_options = ["Start Game", "Quit"]
+        self.selected_option = 0
+
+    def draw(self):
+        self.screen.fill((0, 0, 0))
+
+        for i, option in enumerate(self.menu_options):
+            color = (255, 255, 255) if i == self.selected_option else (150, 150, 150)
+            text = self.font.render(option, True, color)
+            text_rect = text.get_rect(center=(640, 360 + i * 50))
+            self.screen.blit(text, text_rect)
+
+        pygame.display.flip()
+
+    def handle_input(self):
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_UP]:
+            self.selected_option = (self.selected_option - 1) % len(self.menu_options)
+        elif keys[pygame.K_DOWN]:
+            self.selected_option = (self.selected_option + 1) % len(self.menu_options)
+
+        if keys[pygame.K_RETURN]:
+            if self.selected_option == 0:
+                return "start"
+            elif self.selected_option == 1:
+                return "quit"
+
+        return None
+
+
 class Game:
     def __init__(self):
         pygame.init()
@@ -68,11 +103,28 @@ class Game:
         car.position.y = max(car.length / 2, min(car.position.y, 720 / ppu - car.length / 2))
 
     def run(self):
+        menu = Menu(self.screen)
+        in_menu = True
+
+        while in_menu:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    in_menu = False
+                    break
+
+            action = menu.handle_input()
+            if action == "start":
+                in_menu = False
+            elif action == "quit":
+                pygame.quit()
+                return
+
+            menu.draw()
+
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
         car = Car(0, 0)
-    
 
         while not self.exit:
             dt = self.clock.get_time() / 1000
