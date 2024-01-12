@@ -9,4 +9,5 @@
 * Standard Start Menü mit Game Start und Quit hinzugefügt.
 
 ## Level auswahl hinzugefügt
-* Es ist jetzt möglich in der ersten übersicht zwischen 10 Leveln auszuwählen
+* Es ist jetzt möglich in der ersten übersicht zwischen 10 Leveln auszuwählen und mit enter zu bestätigen
+

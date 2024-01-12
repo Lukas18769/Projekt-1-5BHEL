@@ -103,6 +103,9 @@ class LevelMenu:
             self.last_input_time = current_time
 
         return None
+    
+    def confirm_selection(self):
+        return self.selected_level + 1
 
 class Game:
     def __init__(self):
@@ -156,6 +159,7 @@ class Game:
 
             level = level_menu.handle_input()
             if level is not None:
+                self.level = level_menu.confirm_selection()
                 in_level_menu = False
 
             level_menu.draw()
