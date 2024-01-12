@@ -8,5 +8,5 @@
 ## start menü hinzugefügt
 * Standard Start Menü mit Game Start und Quit hinzugefügt.
 
-## Level und score hinzugefügt
-*
+## Level auswahl hinzugefügt
+* Es ist jetzt möglich in der ersten übersicht zwischen 10 Leveln auszuwählen
