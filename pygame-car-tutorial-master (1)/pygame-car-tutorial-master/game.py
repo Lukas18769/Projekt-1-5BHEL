@@ -69,6 +69,40 @@ class Menu:
                 return "quit"
 
         return None
+    
+class LevelMenu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.Font(None, 36)
+        self.levels = [f"Level {i}" for i in range(1, 11)]  # 10 Level
+        self.selected_level = 0
+        self.last_input_time = pygame.time.get_ticks()
+        self.input_delay = 200  # Millisekunden
+
+    def draw(self):
+        self.screen.fill((0, 0, 0))
+        for i, level in enumerate(self.levels):
+            color = (255, 255, 255) if i == self.selected_level else (150, 150, 150)
+            text = self.font.render(level, True, color)
+            text_rect = text.get_rect(center=(640, 360 + i * 30))
+            self.screen.blit(text, text_rect)
+        pygame.display.flip()
+
+    def handle_input(self):
+        keys = pygame.key.get_pressed()
+        current_time = pygame.time.get_ticks()
+
+        if current_time - self.last_input_time >= self.input_delay:
+            if keys[pygame.K_UP]:
+                self.selected_level = (self.selected_level - 1) % len(self.levels)
+            elif keys[pygame.K_DOWN]:
+                self.selected_level = (self.selected_level + 1) % len(self.levels)
+            elif keys[pygame.K_RETURN]:
+                return self.selected_level + 1  # Gibt die Nummer des ausgewählten Levels zurück
+
+            self.last_input_time = current_time
+
+        return None
 
 class Game:
     def __init__(self):
@@ -111,29 +145,27 @@ class Game:
         car.position.y = max(car.length / 2, min(car.position.y, 720 / ppu - car.length / 2))
 
     def run(self):
-        menu = Menu(self.screen)
-        in_menu = True
+        level_menu = LevelMenu(self.screen)
+        in_level_menu = True
 
-        while in_menu:
+        while in_level_menu:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    in_menu = False
+                    in_level_menu = False
                     break
 
-            action = menu.handle_input()
-            if action == "start":
-                in_menu = False
-            elif action == "quit":
-                pygame.quit()
-                return
+            level = level_menu.handle_input()
+            if level is not None:
+                in_level_menu = False
 
-            menu.draw()
+            level_menu.draw()
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "car.png")
         car_image = pygame.image.load(image_path)
         car = Car(0, 0)
 
+        # Rest des Codes bleibt unverändert
         while not self.exit:
             dt = self.clock.get_time() / 1000
 
@@ -151,7 +183,6 @@ class Game:
                 car.acceleration = 0
 
             if not pressed[pygame.K_UP] and not pressed[pygame.K_DOWN]:
-                # Wenn keine Taste für Beschleunigung gedrückt ist, die Geschwindigkeit auf null setzen
                 car.acceleration = 0
 
             if pressed[pygame.K_SPACE]:
@@ -172,8 +203,7 @@ class Game:
 
             self.screen.fill((0, 0, 0))
             self.draw_parking_lines()
-            self.draw_score()  # Draw the score and level
-
+            self.draw_score()
             rotated = pygame.transform.rotate(car_image, car.angle)
             rect = rotated.get_rect()
             self.screen.blit(rotated, car.position * ppu - (rect.width / 2, rect.height / 2))
