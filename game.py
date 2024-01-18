@@ -169,7 +169,7 @@ class Game:
             if level is not None:
                 self.level = level_menu.confirm_selection()
 
-                # Füge hier den Parkour für das aktuelle Level hinzu
+                u
                 if self.level == 2:
                     self.level_parkour = self.create_level_parkour()
 
@@ -182,7 +182,7 @@ class Game:
         car_image = pygame.image.load(image_path)
         car = Car(0, 0)
 
-        # Rest des Codes bleibt unverändert
+        
         while not self.exit:
             dt = self.clock.get_time() / 1000
 
@@ -225,7 +225,7 @@ class Game:
             self.draw_parking_lines()
             self.draw_score()
 
-            # Überprüfe, ob es einen Parkour für das aktuelle Level gibt und zeichne ihn
+            
             if self.level_parkour is not None and self.level == 2:
                 self.draw_level_parkour()
 
@@ -242,7 +242,7 @@ class Game:
         self.screen.fill((0, 0, 0))
 
         if self.level == 1:
-            # Ein Beispiel für viele kleine Parkplätze in Level 1
+            #kleine Parkplätze in Level 1
             parking_spaces = [
                 ((100, 300), (200, 400)),
                 ((300, 300), (400, 400)),
@@ -254,7 +254,7 @@ class Game:
             for space in parking_spaces:
                 pygame.draw.rect(self.screen, (255, 255, 255), (*space[0], space[1][0] - space[0][0], space[1][1] - space[0][1]), 2)
         elif self.level == 2:
-            # Ein Beispiel für viele kleine Parkplätze in Level 2
+            #kleine Parkplätze in Level 2
             parking_spaces = [
                 ((200, 200), (300, 300)),
                 ((400, 200), (500, 300)),
@@ -268,11 +268,11 @@ class Game:
 
 
     def create_level_parkour(self):
-        # Hier kannst du den Parkour für Level 2 erstellen.
+     
         return []
 
     def draw_level_parkour(self):
-        # Hier kannst du die Zeichenlogik für den Level-Parkour implementieren.
+        
         pass
 
 if __name__ == '__main__':
