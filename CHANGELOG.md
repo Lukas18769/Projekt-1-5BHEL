@@ -13,3 +13,9 @@ Basis Projekt: https://github.com/maximryzhov/pygame-car-tutorial
 ## Level auswahl hinzugefügt
 * Es ist jetzt möglich in der ersten übersicht zwischen 10 Leveln auszuwählen und mit enter zu bestätigen
 
+## work in progress
+* Datein aus Verzeichnis geschoben und Verzeichnis gelöscht
+
+## Level 1 und 2 und Level Menü aktualisiert
+* Level 1 und 2 haben unterschiedliche Parkspots bekommen. Größe passt allerdings noch nicht.
+* Es wurde ein Exit button in das Level Menü integriert.

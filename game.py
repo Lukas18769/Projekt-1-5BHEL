@@ -51,6 +51,11 @@ class Menu:
             text_rect = text.get_rect(center=(640, 360 + i * 50))
             self.screen.blit(text, text_rect)
 
+        # Zeichne den Exit-Button
+        exit_text = self.font.render("Exit", True, (255, 255, 255))
+        exit_rect = exit_text.get_rect(center=(640, 360 + len(self.menu_options) * 50))
+        self.screen.blit(exit_text, exit_rect)
+
         pygame.display.flip()
 
     def handle_input(self):
@@ -66,6 +71,9 @@ class Menu:
                 return "start"
             elif self.selected_option == 1:
                 return "quit"
+
+        if keys[pygame.K_ESCAPE]:
+            return "quit"
 
         return None
     
@@ -85,6 +93,12 @@ class LevelMenu:
             text = self.font.render(level, True, color)
             text_rect = text.get_rect(center=(640, 360 + i * 30))
             self.screen.blit(text, text_rect)
+
+        # Zeichne den Exit-Button
+        exit_text = self.font.render("Exit", True, (255, 255, 255))
+        exit_rect = exit_text.get_rect(center=(640, 360 + len(self.levels) * 30))
+        self.screen.blit(exit_text, exit_rect)
+
         pygame.display.flip()
 
     def handle_input(self):
@@ -100,6 +114,9 @@ class LevelMenu:
                 return self.selected_level + 1  # Gibt die Nummer des ausgewählten Levels zurück
 
             self.last_input_time = current_time
+
+        if keys[pygame.K_ESCAPE]:
+            return "quit"
 
         return None
     
@@ -172,6 +189,9 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.exit = True
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self.exit = True
 
             pressed = pygame.key.get_pressed()
 
