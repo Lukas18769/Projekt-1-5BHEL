@@ -1,6 +1,6 @@
 import os
 import pygame
-from math import sin, radians, degrees, copysign
+from math import sin, radians, degrees, cos, copysign
 from pygame.math import Vector2
 
 class Car:
@@ -22,7 +22,6 @@ class Car:
             self.velocity += (self.acceleration * dt, 0)
             self.velocity.x = max(-self.max_velocity, min(self.velocity.x, self.max_velocity))
         else:
-            # Wenn keine Taste für Beschleunigung gedrückt ist, die Geschwindigkeit auf null setzen
             self.velocity.x = 0.0
 
         if self.steering:
@@ -119,6 +118,7 @@ class Game:
         self.exit = False
         self.score = 0
         self.level = 1
+        self.level_parkour = None  # Parkour für das aktuelle Level
 
     def draw_score(self):
         font = pygame.font.Font(None, 36)
@@ -128,20 +128,11 @@ class Game:
         self.screen.blit(level_text, (10, 50))
 
     def draw_parking_lines(self):
-        # Linien für Parklücke 1
-        pygame.draw.line(self.screen, (255, 255, 255), (100, 0), (100, 200), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (100, 200), (200, 200), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (200, 200), (200, 0), 2)
-
-        # Linien für Parklücke 2
-        pygame.draw.line(self.screen, (255, 255, 255), (400, 0), (400, 150), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (400, 150), (500, 150), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (500, 150), (500, 0), 2)
-
-        # Linien für Parklücke 3
-        pygame.draw.line(self.screen, (255, 255, 255), (800, 0), (800, 100), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (800, 100), (900, 100), 2)
-        pygame.draw.line(self.screen, (255, 255, 255), (900, 100), (900, 0), 2)
+        # Linien für die Straße
+        pygame.draw.line(self.screen, (255, 255, 255), (100, 300), (1200, 300), 2)
+        pygame.draw.line(self.screen, (255, 255, 255), (1200, 300), (1200, 500), 2)
+        pygame.draw.line(self.screen, (255, 255, 255), (1200, 500), (100, 500), 2)
+        pygame.draw.line(self.screen, (255, 255, 255), (100, 500), (100, 300), 2)
 
     def limit_car_position(self, car):
         car.position.x = max(car.length / 2, min(car.position.x, 1280 / ppu - car.length / 2))
@@ -160,6 +151,11 @@ class Game:
             level = level_menu.handle_input()
             if level is not None:
                 self.level = level_menu.confirm_selection()
+
+                # Füge hier den Parkour für das aktuelle Level hinzu
+                if self.level == 2:
+                    self.level_parkour = self.create_level_parkour()
+
                 in_level_menu = False
 
             level_menu.draw()
@@ -208,6 +204,11 @@ class Game:
             self.screen.fill((0, 0, 0))
             self.draw_parking_lines()
             self.draw_score()
+
+            # Überprüfe, ob es einen Parkour für das aktuelle Level gibt und zeichne ihn
+            if self.level_parkour is not None and self.level == 2:
+                self.draw_level_parkour()
+
             rotated = pygame.transform.rotate(car_image, car.angle)
             rect = rotated.get_rect()
             self.screen.blit(rotated, car.position * ppu - (rect.width / 2, rect.height / 2))
@@ -216,6 +217,43 @@ class Game:
             self.clock.tick(self.ticks)
 
         pygame.quit()
+
+    def draw_parking_lines(self):
+        self.screen.fill((0, 0, 0))
+
+        if self.level == 1:
+            # Ein Beispiel für viele kleine Parkplätze in Level 1
+            parking_spaces = [
+                ((100, 300), (200, 400)),
+                ((300, 300), (400, 400)),
+                ((500, 300), (600, 400)),
+                ((700, 300), (800, 400)),
+                ((900, 300), (1000, 400))
+            ]
+
+            for space in parking_spaces:
+                pygame.draw.rect(self.screen, (255, 255, 255), (*space[0], space[1][0] - space[0][0], space[1][1] - space[0][1]), 2)
+        elif self.level == 2:
+            # Ein Beispiel für viele kleine Parkplätze in Level 2
+            parking_spaces = [
+                ((200, 200), (300, 300)),
+                ((400, 200), (500, 300)),
+                ((600, 200), (700, 300)),
+                ((800, 200), (900, 300)),
+                ((1000, 200), (1100, 300))
+            ]
+
+            for space in parking_spaces:
+                pygame.draw.rect(self.screen, (255, 255, 255), (*space[0], space[1][0] - space[0][0], space[1][1] - space[0][1]), 2)
+
+
+    def create_level_parkour(self):
+        # Hier kannst du den Parkour für Level 2 erstellen.
+        return []
+
+    def draw_level_parkour(self):
+        # Hier kannst du die Zeichenlogik für den Level-Parkour implementieren.
+        pass
 
 if __name__ == '__main__':
     game = Game()
